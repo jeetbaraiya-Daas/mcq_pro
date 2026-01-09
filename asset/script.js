@@ -1,60 +1,54 @@
-// Question Database
 const quizData = {
     technology: [
-        { q: "What does CPU stand for?", a: "Central Processing Unit", options: ["Central Process Unit", "Central Processing Unit", "Computer Personal Unit", "Central Processor Unifier"] },
-        { q: "Which language is used for web styling?", a: "CSS", options: ["HTML", "Python", "CSS", "Java"] },
-        { q: "Which of these is a Javascript library?", a: "jQuery", options: ["HTML", "CSS", "jQuery", "Python"] }
+        { q: "What does HTML stand for?", a: "HyperText Markup Language", options: ["HyperText Markup Language", "HighText Machine Language", "HyperTool Multi Language", "None"] },
+        { q: "Is JavaScript same as Java?", a: "No", options: ["Yes", "No", "Maybe", "Only in browsers"] }
     ],
     science: [
-        { q: "What is the chemical symbol for water?", a: "H2O", options: ["O2", "H2O", "CO2", "HO2"] },
-        { q: "Which planet is known as the Red Planet?", a: "Mars", options: ["Venus", "Mars", "Jupiter", "Saturn"] }
-    ],
-    general: [
-        { q: "Which is the largest continent?", a: "Asia", options: ["Africa", "Europe", "Asia", "North America"] },
-        { q: "How many days are in a leap year?", a: "366", options: ["364", "365", "366", "367"] }
-    ],
-    "pop-culture": [
-        { q: "Who played Iron Man in the Marvel movies?", a: "Robert Downey Jr.", options: ["Chris Evans", "Robert Downey Jr.", "Tom Holland", "Mark Ruffalo"] },
-        { q: "Which singer is known as the 'Queen of Pop'?", a: "Madonna", options: ["Beyonce", "Madonna", "Lady Gaga", "Taylor Swift"] }
+        { q: "Boiling point of water?", a: "100°C", options: ["90°C", "100°C", "120°C", "80°C"] },
+        { q: "Powerhouse of the cell?", a: "Mitochondria", options: ["Nucleus", "Ribosome", "Mitochondria", "Cell Wall"] }
     ]
 };
 
 let currentQuestionIndex = 0;
 let score = 0;
 
-$(document).ready(function() {
-    // 1. Logic for Home Page
-    window.selectCategory = function(cat) {
-        localStorage.setItem('selectedCategory', cat);
-        window.location.href = 'quiz.html';
-    };
+// This function MUST be global for the onclick to work
+window.selectCategory = function(cat) {
+    console.log("Category selected:", cat);
+    localStorage.setItem('selectedCategory', cat);
+    window.location.href = 'quiz.html';
+};
 
-    // 2. Logic for Quiz Page
-    if ($('#question-text').length > 0) {
-        const cat = localStorage.getItem('selectedCategory') || 'general';
+$(document).ready(function() {
+    // Determine which page we are on
+    const path = window.location.pathname;
+    const page = path.split("/").pop();
+
+    if (page === "quiz.html" || $("#quiz-card").length > 0) {
+        const cat = localStorage.getItem('selectedCategory') || 'technology';
         loadQuestion(cat);
     }
 
     function loadQuestion(cat) {
         const questions = quizData[cat];
-        const currentQ = questions[currentQuestionIndex];
+        const q = questions[currentQuestionIndex];
 
         $('#category-label').text(cat.toUpperCase());
         $('#progress').text(`Question ${currentQuestionIndex + 1}/${questions.length}`);
-        $('#question-text').text(currentQ.q);
+        $('#question-text').text(q.q);
         $('#options-container').empty();
 
-        currentQ.options.forEach(opt => {
-            const btn = $(`<button class="btn btn-outline-dark p-3">${opt}</button>`);
-            btn.on('click', () => checkAnswer(opt, currentQ.a, cat));
+        q.options.forEach(opt => {
+            const btn = $(`<button class="btn btn-outline-dark p-3 w-100">${opt}</button>`);
+            btn.on('click', function() { checkAnswer(opt, q.a, cat); });
             $('#options-container').append(btn);
         });
     }
 
     function checkAnswer(selected, correct, cat) {
         if (selected === correct) score++;
-        
         currentQuestionIndex++;
+
         if (currentQuestionIndex < quizData[cat].length) {
             $('#quiz-card').fadeOut(200, function() {
                 loadQuestion(cat);
@@ -67,8 +61,8 @@ $(document).ready(function() {
         }
     }
 
-    // 3. Logic for Result Page
-    if ($('#final-score').length > 0) {
-        $('#final-score').text(localStorage.getItem('lastScore') + "%");
+    if (page === "result.html" || $("#final-score").length > 0) {
+        const lastScore = localStorage.getItem('lastScore') || 0;
+        $('#final-score').text(lastScore + "%");
     }
 });
