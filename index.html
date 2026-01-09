@@ -2,9 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=q, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App - Home</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="asset/style.css">
 </head>
 <body>
+
+    <div class="container main-container">
+        <div class="text-center mb-5">
+            <h1 class="app-title">Quiz Selection</h1>
+            <p class="text-muted">Choose a category to start learning</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card category-card text-center" onclick="selectCategory('general-knowledge')">
+                    <div class="card-body">
+                        <i class="fas fa-brain category-icon"></i>
+                        <h5 class="card-title mt-3">General Knowledge</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card category-card text-center" onclick="selectCategory('science')">
+                    <div class="card-body">
+                        <i class="fas fa-atom category-icon"></i>
+                        <h5 class="card-title mt-3">Science</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card category-card text-center" onclick="selectCategory('history')">
+                    <div class="card-body">
+                        <i class="fas fa-scroll category-icon"></i>
+                        <h5 class="card-title mt-3">History</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card category-card text-center" onclick="selectCategory('pop-culture')">
+                    <div class="card-body">
+                        <i class="fas fa-film category-icon"></i>
+                        <h5 class="card-title mt-3">Pop Culture</h5>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
