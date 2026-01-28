@@ -11,29 +11,40 @@
 
     <header class="bg-white py-3 shadow-sm mb-4">
         <div class="container">
-            <h4 class="fw-bold m-0">Mcq-Quiz</h4>
+            <h4 class="fw-bold m-0">QuizMaster</h4>
         </div>
     </header>
 
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="card p-4 shadow-lg border-0" id="quiz-card">
+                <div class="card p-4 shadow-lg border-0" id="quiz-card" style="overflow: hidden; position: relative;">
+                    
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span id="category-label" class="badge bg-dark px-3 py-2">Category</span>
-                        <div id="progress" class="small fw-bold">Question 1/5</div>
+                        <div id="timer" class="text-danger fw-bold">Time: 60s</div>
                     </div>
                     
-                    <h3 id="question-text" class="mb-4 text-center">Loading...</h3>
-                    
-                    <div id="options-container" class="d-grid gap-3">
-                        </div>
+                    <div id="quiz-content">
+                        <h3 id="question-text" class="mb-4">Loading...</h3>
+                        <div id="options-container" class="d-grid gap-3"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4 border-top pt-3">
+                        <button id="prev-btn" class="btn btn-secondary px-4">Previous</button>
+                        <span id="progress" class="align-self-center fw-bold text-muted">1 of 5</span>
+                        <button id="next-btn" class="btn btn-dark px-4">Next</button>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="asset/script.js"></script>
+</body>
+</html>
     <script src="asset/script.js"></script>
 </body>
 </html>
