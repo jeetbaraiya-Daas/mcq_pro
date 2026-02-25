@@ -1,67 +1,88 @@
-/* General Body Styles */
+/* Base Styles */
+:root {
+    --primary-yellow: #FDD835;
+    --correct-green: #4CAF50;
+    --wrong-red: #F44336;
+}
+
 body {
-    background-color: #FDD835; /* The bright yellow from your image */
+    background-color: var(--primary-yellow);
     font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center; /* Vertically centers content */
-    justify-content: center;
+    transition: background 0.5s ease;
 }
 
-/* Container spacing */
-.main-container {
-    padding: 20px;
-}
+.bg-yellow { background-color: var(--primary-yellow); }
 
-/* Header Styling */
-.app-title {
-    font-weight: 700;
-    color: #333;
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-}
-
-/* Card Styling to match the white, rounded look */
+/* Card & UI */
 .category-card {
-    border: none;
-    border-radius: 20px; /* Rounded corners like the image */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 3px solid #333;
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
-    background-color: #fff;
-    height: 100%; /* Makes all cards equal height */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Soft shadow */
+    background: white;
+    box-shadow: 6px 6px 0px #333;
 }
 
-/* Hover Effect - Makes it interactive */
 .category-card:hover {
-    transform: translateY(-5px); /* Moves up slightly on hover */
-    box-shadow: 0 10px 15px rgba(0,0,0,0.15);
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0px #333;
 }
 
-/* Icon Styling */
 .category-icon {
-    font-size: 3rem; /* Large icons */
-    color: #FDD835; /* Icon color matches background */
-    margin-bottom: 10px;
-    /* Adding a black outline to icon to match the 'doodle' style in image */
-    -webkit-text-stroke: 1px #333; 
-    color: transparent; /* Makes the inside of the icon see-through or white */
-    text-shadow: 2px 2px 0 #333; /* Hard shadow for cartoon effect */
-}
-
-/* If text-stroke is too complex, simpler student version: */
-/* .category-icon {
     font-size: 3rem;
-    color: #333;
-}
-*/
-btn-outline-dark:hover {
-    background-color: #eee;
-    color: #000;
-}
-.card-title {
-    font-weight: 600;
-    color: #333;
-    font-size: 1rem;
+    -webkit-text-stroke: 1.5px #333;
+    color: transparent;
+    text-shadow: 3px 3px 0 #333;
 }
 
+/* Real-time Feedback Classes */
+.option-btn {
+    border: 2px solid #333 !important;
+    border-radius: 15px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.option-btn.correct {
+    background-color: var(--correct-green) !important;
+    color: white !important;
+    border-color: #1b5e20 !important;
+}
+
+.option-btn.wrong {
+    background-color: var(--wrong-red) !important;
+    color: white !important;
+    border-color: #b71c1c !important;
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Animations */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Progress Bar */
+#quiz-progress-bar {
+    transition: width 0.4s ease;
+}
