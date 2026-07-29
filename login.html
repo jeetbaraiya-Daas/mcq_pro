@@ -3,29 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="asset/style.css">
+    <title>Login | Interactive Quiz Application</title>
+    <!-- Bootstrap 5 for professional, responsive layouts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Modern Corporate SaaS Styling */
+        body {
+            /* Subtle, professional gradient background */
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .login-card {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            /* Soft, elevated drop shadow */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: #0d6efd; /* Trust-inspiring primary blue */
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+        }
+
+        .form-floating > .form-control {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .form-floating > .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        }
+
+        .btn-primary {
+            padding: 0.8rem;
+            font-weight: 600;
+            border-radius: 8px;
+            letter-spacing: 0.3px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+        }
+    </style>
 </head>
 <body>
-    <h1>Login Page</h1>
-    <form>
-        <table>
-            <tr>
-                <td>Name : </td>
-                <td><input type="text" name="" ></td>
-            </tr>
-            <tr>
-                <td>Email : </td>
-                <td><input tupe="text" name=""></td>
-            </tr>
-            <tr>
-                <td>Password : </td>
-                <td><input tupe="text" name=""></td>
-            </tr>
-            <tr>
-                <td><input type="submit" name="s"></td>
-            </tr>
-        </table>
-    </form>
+
+    <div class="login-card">
+        <!-- Mock Logo for a professional touch -->
+        <div class="brand-icon">Q</div>
+        
+        <h3 class="text-center mb-1 fw-bold text-dark">Welcome back</h3>
+        <p class="text-center text-muted mb-4 small">Sign in to start your assessment</p>
+        
+        <form id="loginForm">
+           
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="userName" placeholder="John Doe" required autocomplete="name">
+                <label for="userName">Full Name</label>
+            </div>
+            
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="userEmail" placeholder="name@example.com" required autocomplete="email">
+                <label for="userEmail">Email address</label>
+            </div>
+            
+            <div class="form-floating mb-4">
+                <input type="password" class="form-control" id="userPassword" placeholder="Password" required minlength="6">
+                <label for="userPassword">Password</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">Access Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('userName').value;
+            if (name.trim()) {
+                sessionStorage.setItem('quizUserName', name);
+                const btn = this.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+                btn.disabled = true;
+
+                // Simulate network request before redirecting (optional, but looks good)
+                setTimeout(() => {
+                    window.location.href = 'index.html'; 
+                }, 500);
+            }
+        })
+    </script>
 </body>
 </html>
