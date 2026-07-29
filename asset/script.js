@@ -1,12 +1,6 @@
-/**
- * INTERACTIVE QUIZ APPLICATION
- * Placement-Ready Features: ES6 Syntax, State Management, Data Filtering, and Set Data Structures
- */
-
 // ==========================================
 // 1. MOCK DATABASE (Expanded with Difficulties)
 // ==========================================
-// In a real application, this would be fetched from a REST API (like OpenTDB).
 const quizDatabase = {
     technology: [
         { q: "What does HTML stand for?", options: ["Hyper Text Preprocessor", "Hyper Text Markup Language", "Hyper Tool Multi Language", "Home Tool Markup Language"], answer: 1, difficulty: "easy" },
