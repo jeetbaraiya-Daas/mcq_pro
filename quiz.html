@@ -3,48 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Master - Play</title>
+    <title> Interactive Quiz Application - Play</title>
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="asset/style.css">
-</head>
-<body class="bg-light">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Modern SaaS Theme */
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
 
+        .custom-card {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Radio Buttons for Difficulty */
+        .btn-check:checked + .btn-outline-success { background-color: #198754; color: white; }
+        .btn-check:checked + .btn-outline-warning { background-color: #ffc107; color: black; }
+        .btn-check:checked + .btn-outline-danger { background-color: #dc3545; color: white; }
+
+        /* Option Buttons inside the quiz */
+        .option-btn {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            text-align: left;
+            padding: 1rem 1.25rem;
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .option-btn:hover:not(:disabled) {
+            border-color: #0d6efd;
+            background: #f8faff;
+            transform: translateX(5px);
+        }
+
+        .option-btn.selected {
+            border-color: #0d6efd;
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        /* Progress Bar Polish */
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background-color: #e2e8f0;
+            overflow: visible;
+        }
+        .progress-bar {
+            border-radius: 10px;
+            background: linear-gradient(90deg, #0d6efd, #0dcaf0);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Flagged Question Styling */
+        .btn-flagged {
+            color: #dc3545;
+            background-color: #ffe6e6;
+            border-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
     <header class="bg-white py-3 shadow-sm mb-4 w-100 position-fixed top-0" style="z-index: 1000;">
         <div class="container d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold m-0">QuizMaster</h4>
-            <div id="timer" class="text-danger fw-bold fs-5">Time: 60s</div>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-sm btn-light me-3" onclick="window.location.href='index.html'" title="Exit Quiz">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h5 class="fw-bold m-0 text-dark">QuizMaster</h5>
+            </div>
+            <!-- Timer is hidden until quiz starts -->
+            <div id="timer-display" class="d-none px-3 py-1 bg-light rounded-pill border fw-bold text-danger">
+                <i class="fas fa-stopwatch me-1"></i> <span id="timer">00:00</span>
+            </div>
         </div>
     </header>
 
-    <div class="container mt-5 pt-5">
+    <div class="container mt-5 pt-5 pb-5">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
-                <div class="progress mb-3" style="height: 10px; border-radius: 10px;">
-                    <div id="quiz-progress-bar" class="progress-bar bg-dark" role="progressbar" style="width: 0%;"></div>
-                </div>
-
-                <div class="card p-4 shadow-lg border-0" id="quiz-card">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <span id="category-label" class="badge bg-dark px-3 py-2">Category</span>
-                        <span id="progress-text" class="fw-bold text-muted">1 of 5</span>
+                
+                <!-- ========================================== -->
+                <!-- STATE 1: QUIZ CONFIGURATION SETTINGS       -->
+                <!-- ========================================== -->
+                <div id="quiz-setup-card" class="custom-card p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <span id="setup-category-badge" class="badge bg-primary mb-2 px-3 py-2 fs-6 rounded-pill">Category</span>
+                        <h3 class="fw-bold text-dark">Configure Your Quiz</h3>
+                        <p class="text-muted">Customize your session before starting.</p>
                     </div>
-                    
-                    <div id="quiz-content" class="animate-fade-in">
-                        <h3 id="question-text" class="mb-4 fw-bold">Loading question...</h3>
-                        <div id="options-container" class="d-grid gap-3">
+
+                    <form id="quiz-config-form">
+                        <!-- Difficulty Selection -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Select Difficulty</label>
+                            <div class="d-flex gap-2 w-100">
+                                <input type="radio" class="btn-check" name="difficulty" id="diff-easy" value="easy" checked>
+                                <label class="btn btn-outline-success flex-fill rounded-pill" for="diff-easy">Easy</label>
+
+                                <input type="radio" class="btn-check" name="difficulty" id="diff-medium" value="medium">
+                                <label class="btn btn-outline-warning flex-fill rounded-pill" for="diff-medium">Medium</label>
+
+                                <input type="radio" class="btn-check" name="difficulty" id="diff-hard" value="hard">
+                                <label class="btn btn-outline-danger flex-fill rounded-pill" for="diff-hard">Hard</label>
                             </div>
+                        </div>
+
+                        <!-- Question Count Selection -->
+                        <div class="mb-5">
+                            <label class="form-label fw-bold">Number of Questions</label>
+                            <select class="form-select form-select-lg" id="question-count">
+                                <option value="5">5 Questions (Quick Session)</option>
+                                <option value="10" selected>10 Questions (Standard)</option>
+                                <option value="15">15 Questions (Deep Dive)</option>
+                            </select>
+                        </div>
+
+                        <button type="button" id="start-quiz-btn" class="btn btn-primary w-100 py-3 rounded-pill fw-bold fs-5 shadow-sm">
+                            Launch Quiz <i class="fas fa-rocket ms-2"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- STATE 2: ACTIVE QUIZ PLAY AREA (Hidden initially) -->
+                <!-- ========================================== -->
+                <div id="quiz-play-section" class="d-none">
+                    
+                    <!-- Progress Tracker -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-end mb-2">
+                            <span class="text-muted fw-bold small text-uppercase tracking-wide">Progress</span>
+                            <span id="progress-text" class="badge bg-dark rounded-pill px-3">1 of 10</span>
+                        </div>
+                        <div class="progress">
+                            <div id="quiz-progress-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                        </div>
                     </div>
 
-                    <div class="d-flex justify-content-between mt-4 border-top pt-3">
-                        <button id="prev-btn" class="btn btn-outline-secondary px-4 rounded-pill">Previous</button>
-                        <button id="next-btn" class="btn btn-dark px-4 rounded-pill">Next</button>
+                    <!-- Main Question Card -->
+                    <div class="custom-card p-4 p-md-5" id="quiz-card">
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <span id="category-label" class="badge bg-light text-primary border border-primary px-3 py-2 rounded-pill">Category</span>
+                            <!-- Portfolio Feature: Flag Question -->
+                            <button id="flag-btn" class="btn btn-sm btn-outline-secondary rounded-pill px-3" title="Flag for review">
+                                <i class="fas fa-flag"></i> Flag
+                            </button>
+                        </div>
+                        
+                        <div id="quiz-content">
+                            <h4 id="question-text" class="mb-4 fw-bold" style="color: #1e293b; line-height: 1.4;">
+                                Loading question...
+                            </h4>
+                            <div id="options-container" class="d-grid gap-3 mt-4">
+                                <!-- Options injected via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Navigation -->
+                        <div class="d-flex justify-content-between mt-5 pt-4 border-top">
+                            <button id="prev-btn" class="btn btn-light px-4 py-2 fw-bold text-muted rounded-pill">
+                                <i class="fas fa-chevron-left me-1"></i> Back
+                            </button>
+                            <button id="next-btn" class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-sm">
+                                Next <i class="fas fa-chevron-right ms-1"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Simple UI toggle script to show how the states switch. 
+        $(document).ready(function() {
+            // Show category name dynamically on setup page
+            const selectedCat = sessionStorage.getItem('selectedCategory') || 'Technology';
+            $('#setup-category-badge').text(selectedCat.toUpperCase());
+
+            $('#start-quiz-btn').click(function() {
+                // Capture user preferences
+                const difficulty = $('input[name="difficulty"]:checked').val();
+                const questionCount = $('#question-count').val();
+                
+                sessionStorage.setItem('quizDifficulty', difficulty);
+                sessionStorage.setItem('quizCount', questionCount);
+                
+                $('#quiz-setup-card').fadeOut(200, function() {
+                    $('#quiz-play-section').removeClass('d-none').hide().fadeIn(300);
+                    $('#timer-display').removeClass('d-none');
+                    
+                    // Call the initQuiz function (which we will build in script.js next)
+                    if(typeof initQuiz === "function") initQuiz();
+                });
+            });
+
+            $('#flag-btn').click(function() {
+                $(this).toggleClass('btn-flagged btn-outline-secondary');
+                if($(this).hasClass('btn-flagged')) {
+                    $(this).html('<i class="fas fa-flag"></i> Flagged');
+                } else {
+                    $(this).html('<i class="fas fa-flag"></i> Flag');
+                }
+            });
+        });
+    </script>
+    
     <script src="asset/script.js"></script>
 </body>
 </html>
