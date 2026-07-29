@@ -3,42 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Result</title>
+    <title>Quiz Result | QuizMaster</title>
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="asset/style.css">
+    
+    <style>
+        /* Modern SaaS Theme */
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .result-card {
+            background: white;
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 3rem 2rem;
+            width: 100%;
+            max-width: 450px;
+            animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scaleUp {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Circular Progress Ring using Conic Gradient */
+        .circular-chart-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 2rem;
+        }
+
+        .progress-ring {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            /* Default grey background, filled dynamically via JS */
+            background: conic-gradient(#e2e8f0 100%, #e2e8f0 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .progress-ring::before {
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .percentage-text {
+            position: relative;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            z-index: 2;
+        }
+
+        /* Stat Boxes */
+        .stat-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+            border-color: #cbd5e1;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
 </head>
-<body class="bg-yellow d-flex align-items-center justify-content-center min-vh-100">
+<body>
 
-    <div class="card p-5 text-center shadow-lg border-0 animate-slide-up" style="max-width: 500px; border-radius: 30px;">
-        <h1 class="fw-bold mb-0">Quiz Finished!</h1>
-        <p class="text-muted mb-4">Here is how you performed:</p>
+    <div class="result-card text-center">
+        <!-- Dynamic Header -->
+        <div class="mb-4">
+            <h2 class="fw-bold" id="greeting-text">Quiz Complete!</h2>
+            <p class="text-muted" id="feedback-message">Calculating your results...</p>
+        </div>
 
-        <div class="result-chart-container mb-4">
-            <div class="display-2 fw-bold text-dark" id="final-score">0%</div>
-            <div class="progress mt-2" style="height: 20px; border-radius: 10px;">
-                <div id="result-fill-bar" class="progress-bar bg-success" style="width: 0%"></div>
+        <!-- Advanced UI: Circular Progress Ring -->
+        <div class="circular-chart-container">
+            <div id="progress-ring" class="progress-ring">
+                <span class="percentage-text"><span id="final-percent">0</span>%</span>
             </div>
         </div>
 
-        <div class="row mb-4 g-2">
+        <!-- Stats Grid -->
+        <div class="row g-3 mb-4">
             <div class="col-6">
-                <div class="p-3 bg-light rounded-4">
-                    <small class="text-muted d-block">Score</small>
-                    <strong id="stat-score" class="fs-4">0/0</strong>
+                <div class="stat-box">
+                    <i class="fas fa-bullseye stat-icon text-primary"></i>
+                    <small class="text-muted d-block fw-semibold text-uppercase" style="font-size: 0.75rem;">Score</small>
+                    <strong id="stat-score" class="fs-4 text-dark">0/0</strong>
                 </div>
             </div>
             <div class="col-6">
-                <div class="p-3 bg-light rounded-4">
-                    <small class="text-muted d-block">Attempted</small>
-                    <strong id="stat-attempted" class="fs-4">0</strong>
+                <div class="stat-box">
+                    <i class="fas fa-check-circle stat-icon text-success"></i>
+                    <small class="text-muted d-block fw-semibold text-uppercase" style="font-size: 0.75rem;">Attempted</small>
+                    <strong id="stat-attempted" class="fs-4 text-dark">0</strong>
                 </div>
             </div>
         </div>
-
-        <a href="index.html" class="btn btn-dark btn-lg w-100 rounded-pill py-3 fw-bold">Try Another Category</a>
+        <!-- Actions -->
+        <div class="d-grid gap-3 mt-2">
+            <a href="index.html" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm">
+                <i class="fas fa-redo me-2"></i> Play Again
+            </a>
+            <a href="login.html" class="btn btn-light rounded-pill fw-bold text-muted border" onclick="sessionStorage.clear()">
+                <i class="fas fa-sign-out-alt me-2"></i> Logout
+            </a>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="asset/script.js"></script>
+    
+    <!-- UI Rendering Logic -->
+    <script>
+        $(document).ready(function() {
+            // 1. Retrieve Data from SessionStorage
+            const score = parseInt(sessionStorage.getItem('finalScore')) || 0;
+            const total = parseInt(sessionStorage.getItem('totalQuestions')) || 0;
+            const attempted = parseInt(sessionStorage.getItem('attempted')) || 0;
+            const userName = sessionStorage.getItem('quizUserName') || 'Guest';
+            
+            // Format name (capitalize first letter)
+            const formattedName = userName.charAt(0).toUpperCase() + userName.slice(1);
+            
+            // 2. Calculate Percentage
+            const percent = total > 0 ? Math.round((score / total) * 100) : 0;
+
+            // 3. Update Text UI
+            $('#stat-score').text(`${score}/${total}`);
+            $('#stat-attempted').text(attempted);
+
+            // 4. Dynamic Feedback Logic
+            let feedback = "";
+            let ringColor = "";
+
+            if (percent >= 80) {
+                $('#greeting-text').text(`Outstanding, ${formattedName}! 🏆`);
+                feedback = "You have an excellent grasp of this topic.";
+                ringColor = "#10b981"; // Success Green
+            } else if (percent >= 50) {
+                $('#greeting-text').text(`Good job, ${formattedName}! 👍`);
+                feedback = "Solid effort, but there's room to grow.";
+                ringColor = "#3b82f6"; // Primary Blue
+            } else {
+                $('#greeting-text').text(`Keep trying, ${formattedName}! 📚`);
+                feedback = "Review the material and try again.";
+                ringColor = "#f43f5e"; // Warning Red
+            }
+            $('#feedback-message').text(feedback);
+
+            // 5. Animate the Circular Ring and Number Counter
+            $({ counter: 0 }).animate({ counter: percent }, {
+                duration: 1500,
+                easing: 'swing',
+                step: function(now) {
+                    // Update number
+                    $('#final-percent').text(Math.ceil(now));
+                    
+                    // Update CSS Conic Gradient dynamically
+                    const degrees = (now / 100) * 360;
+                    $('#progress-ring').css(
+                        'background', 
+                        `conic-gradient(${ringColor} ${degrees}deg, #e2e8f0 ${degrees}deg)`
+                    );
+                }
+            });
+        });
+    </script>
 </body>
 </html>
