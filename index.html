@@ -3,62 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz App - Home</title>
+    <title> Interactive Quiz Apllication</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="asset/style.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Professional SaaS Theme */
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding-bottom: 3rem;
+        }
+
+        /* Navbar Styling */
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .brand-icon-small {
+            width: 32px;
+            height: 32px;
+            background: #0d6efd;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            margin-top: 4rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Category Cards */
+        .category-card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
+            background: white;
+            height: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .icon-wrapper {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover .icon-wrapper {
+            transform: scale(1.1);
+        }
+
+        /* Specific Category Colors */
+        .bg-tech { background: #e0f2fe; color: #0284c7; }
+        .bg-science { background: #dcfce7; color: #16a34a; }
+        .bg-general { background: #fef3c7; color: #d97706; }
+        .bg-pop { background: #f3e8ff; color: #9333ea; }
+
+        .card-title {
+            font-weight: 600;
+            color: #2b3440;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="container main-container">
-        <div class="text-center mb-5 animate-fade-in">
-            <h1 class="app-title">Quiz Selection</h1>
-            <p class="text-muted">Choose a category to start learning</p>
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <div class="brand-icon-small">Q</div>
+                <span class="fw-bold fs-5"> Interactive Quiz Application</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="text-muted me-3 d-none d-sm-block">Ready to test your skills?</span>
+                <button class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1"></i> Exit
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Personalized Greeting -->
+        <div class="text-center dashboard-header">
+            <h1 class="fw-bold" style="color: #1e293b;">Welcome, <span id="displayUserName" class="text-primary">Guest</span>! 👋</h1>
+            <p class="text-muted fs-5 mt-2">Select a category below to start your assessment.</p>
         </div>
 
         <div class="row g-4 justify-content-center">
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="card category-card text-center" onclick="selectCategory('technology')">
-                    <div class="card-body">
-                        <i class="fas fa-laptop-code category-icon"></i>
-                        <h5 class="card-title mt-3">Technology</h5>
+            
+            <!-- Technology Card -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <!-- Using role and tabindex makes this accessible to keyboard users -->
+                <div class="card category-card text-center p-4" onclick="selectCategory('technology')" role="button" tabindex="0">
+                    <div class="card-body p-0">
+                        <div class="icon-wrapper bg-tech">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h5 class="card-title">Technology</h5>
+                        <p class="text-muted small mb-0">Coding & Web Dev</p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="card category-card text-center" onclick="selectCategory('science')">
-                    <div class="card-body">
-                        <i class="fas fa-atom category-icon"></i>
-                        <h5 class="card-title mt-3">Science</h5>
+            <!-- Science Card -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card category-card text-center p-4" onclick="selectCategory('science')" role="button" tabindex="0">
+                    <div class="card-body p-0">
+                        <div class="icon-wrapper bg-science">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <h5 class="card-title">Science</h5>
+                        <p class="text-muted small mb-0">Physics & Chemistry</p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="card category-card text-center" onclick="selectCategory('general')">
-                    <div class="card-body">
-                        <i class="fas fa-brain category-icon"></i>
-                        <h5 class="card-title mt-3">General Knowledge</h5>
+            <!-- General Knowledge Card -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card category-card text-center p-4" onclick="selectCategory('general')" role="button" tabindex="0">
+                    <div class="card-body p-0">
+                        <div class="icon-wrapper bg-general">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <h5 class="card-title">General</h5>
+                        <p class="text-muted small mb-0">World Geography</p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="card category-card text-center" onclick="selectCategory('pop-culture')">
-                    <div class="card-body">
-                        <i class="fas fa-film category-icon"></i>
-                        <h5 class="card-title mt-3">Pop Culture</h5>
+            <!-- Pop Culture Card -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card category-card text-center p-4" onclick="selectCategory('pop-culture')" role="button" tabindex="0">
+                    <div class="card-body p-0">
+                        <div class="icon-wrapper bg-pop">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <h5 class="card-title">Pop Culture</h5>
+                        <p class="text-muted small mb-0">Music & Movies</p>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="asset/script.js"></script>
+    
+        <script src="asset/script.js"></script>
+    <script>
+        // On page load, retrieve the user's name from the login page
+        document.addEventListener('DOMContentLoaded', () => {
+            const userName = sessionStorage.getItem('quizUserName');
+            if (userName) {
+                // Capitalize the first letter for a cleaner look
+                const formattedName = userName.charAt(0).toUpperCase() + userName.slice(1);
+                document.getElementById('displayUserName').textContent = formattedName;
+            } else {
+                // If they bypassed login, redirect them back to login.html
+                // (Uncomment the line below in production)
+                // window.location.href = 'login.html';
+            }
+        });
+        // Simple logout function
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    this.click();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-
-
